@@ -83,13 +83,11 @@ func markdownToSteps(source []byte) (steps.Steps, error) {
 		if entering {
 			switch v := n.(type) {
 			case *ast.Heading:
-				if v.Level == 1 {
-					header := string(v.Text(source))
-					header = strings.ReplaceAll(header, ":", "\n")
-					s = append(s, &steps.Heading{
-						Content: header,
-					})
-				}
+				header := string(v.Text(source))
+				header = strings.ReplaceAll(header, ":", "\n")
+				s = append(s, &steps.Heading{
+					Content: header,
+				})
 			case *ast.Paragraph:
 				s = append(s, &steps.Voiceover{
 					Content: nodeToLines(v, source),
