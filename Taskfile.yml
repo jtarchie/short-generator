@@ -6,7 +6,10 @@ tasks:
     - deno fmt README.md
     - isort build.py
     - black build.py
-  lint: pylint build.py
+  lint:
+    cmds:
+    - pylint build.py
+    - mypy --ignore-missing-imports build.py
   default:
     cmds:
     - task: format

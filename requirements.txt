@@ -1,6 +1,7 @@
 black
 elevenlabslib
+isort
 mistune
 moviepy
+mypy
 pylint
-isort

@@ -6,7 +6,6 @@
 # pylint: disable=unspecified-encoding
 
 import os
-import pprint
 import subprocess
 import sys
 from dataclasses import dataclass
@@ -74,10 +73,9 @@ def from_language_to_extension(language: str) -> str:
 
 
 def markdown_to_steps(source: str) -> List[Step]:
-    steps = []
+    steps: List[Step] = []
     markdown = mistune.create_markdown(renderer="ast")
     ast = markdown(source)
-    print(ast)
 
     for node in ast:
         if node["type"] == "heading":
@@ -98,7 +96,6 @@ def markdown_to_steps(source: str) -> List[Step]:
                 Codeblock(previous_step.content, extension, language, node["text"])
             )
 
-    pprint.pprint(steps)
     return steps
 
 
