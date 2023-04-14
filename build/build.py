@@ -3,6 +3,11 @@ import json
 import os
 import subprocess
 import sys
+from elevenlabslib.helpers import *
+from elevenlabslib import *
+
+client = ElevenLabsUser(os.getenv("ELEVENLABS_API_KEY"))
+voice = client.get_voices_by_name("Josh")[0]
 
 clips = []
 screensize = (1080, 1920)
@@ -15,11 +20,13 @@ with open(script_file, 'r') as f:
 
 def say(filename: str, message: str):
     print(f"  say: {message}")
-    subprocess.run(
-        ["say",
-         "-o", filename,
-         "-v", "Daniel",
-         message], check=True)
+    # subprocess.run(
+    #     ["say",
+    #      "-o", filename,
+    #      "-v", "Daniel",
+    #      message], check=True)
+    bytes = voice.generate_audio_bytes(message)
+    save_bytes_to_path(filename, bytes)
 
 
 def code(sourceFilename: str, outputFilename: str, source: str):

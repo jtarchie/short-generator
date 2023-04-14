@@ -142,3 +142,4 @@ fabric.properties
 Brewfile.lock.json
 output/
 .DS_Store
+.envrc
