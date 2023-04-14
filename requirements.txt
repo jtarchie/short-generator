@@ -5,3 +5,4 @@ mistune
 moviepy
 mypy
 pylint
+python-frontmatter

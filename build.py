@@ -5,12 +5,15 @@
 # pylint: disable=too-many-locals
 # pylint: disable=unspecified-encoding
 
+import hashlib
 import os
 import subprocess
 import sys
+import time
 from dataclasses import dataclass
 from typing import List, Union
 
+import frontmatter
 import mistune
 from elevenlabslib import ElevenLabsUser
 from elevenlabslib.helpers import save_bytes_to_path
@@ -99,9 +102,14 @@ def markdown_to_steps(source: str) -> List[Step]:
     return steps
 
 
-def say(voice, filename: str, message: str):
+def say(voice, output_path: str, message: str) -> str:
     print(f"  say: {message}")
-    save_bytes_to_path(filename, voice.generate_audio_bytes(message))
+    hash_value = hashlib.md5((voice.initialName + message).encode())
+    filename = os.path.join(output_path, hash_value.hexdigest() + ".wav")
+    if not os.path.isfile(filename):
+        print("     saving file")
+        save_bytes_to_path(filename, voice.generate_audio_bytes(message))
+    return filename
 
 
 def code(source_filename: str, output_filename: str, source: str):
@@ -123,14 +131,15 @@ def code(source_filename: str, output_filename: str, source: str):
 
 def main():
     client = ElevenLabsUser(os.getenv("ELEVENLABS_API_KEY"))
-    voice = client.get_voices_by_name("Josh")[0]
+    voice = client.get_voices_by_name("Rachel")[0]
 
     screensize = (1080, 1920)
     markdown_file = sys.argv[1]
     working_dir = sys.argv[2]
 
     with open(markdown_file, "r") as f:
-        steps = markdown_to_steps(f.read())
+        markdown = frontmatter.load(f)
+        steps = markdown_to_steps(markdown.content)
 
     clips = []
     for index, step in enumerate(steps):
@@ -140,14 +149,13 @@ def main():
             clip = (
                 TextClip(header, fontsize=70, size=screensize, color="white")
                 .set_position("center", "center")
-                .set_duration(2)
+                .set_duration(3)
             )
 
             clips.append(clip)
         elif isinstance(step, Voiceover):
             message = step.content.strip()
-            outputWaveFilename = os.path.join(working_dir, f"say_{index}.aiff")
-            say(voice, outputWaveFilename, message)
+            outputWaveFilename = say(voice, working_dir, message)
 
             audioClip = AudioFileClip(outputWaveFilename)
             clip = (
@@ -159,15 +167,16 @@ def main():
 
             clips.append(clip)
         elif isinstance(step, Codeblock):
+            time.sleep(5)
             filename = f"code_{index}"
             sourceCodeFilename = os.path.join(
                 working_dir, f"{filename}{step.extension}"
             )
             outputCodeFilename = os.path.join(working_dir, f"{filename}.png")
-            outputWaveFilename = os.path.join(working_dir, f"{filename}.aiff")
+            outputWaveFilename = os.path.join(working_dir, f"{filename}.wav")
 
             code(sourceCodeFilename, outputCodeFilename, step.source.strip())
-            say(voice, outputWaveFilename, step.content.strip())
+            outputWaveFilename = say(voice, working_dir, step.content.strip())
 
             audioClip = AudioFileClip(outputWaveFilename)
             imageClip = (
