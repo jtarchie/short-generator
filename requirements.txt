@@ -1,0 +1,6 @@
+black
+elevenlabslib
+mistune
+moviepy
+pylint
+isort

@@ -4,13 +4,10 @@ tasks:
   format:
     cmds:
     - deno fmt README.md
-    - gofmt -w .
-  lint: golangci-lint run --fix --timeout "10m"
-  test-race: go test -cover -race ./...
-  test: go test ./...
+    - isort build.py
+    - black build.py
+  lint: pylint build.py
   default:
     cmds:
     - task: format
     - task: lint
-    - task: test-race
-    - task: test

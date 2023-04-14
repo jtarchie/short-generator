@@ -18,25 +18,20 @@ To use the tool, follow these steps:
 
 ```bash
 brew bundle
-pip3 install -r build/requirements.txt
+pip3 install -r requirements.txt
 ```
 
 2. Run the Go script to process the markdown file:
 
-```bash
-go run main.go \
-  --filename <markdown-file> \
-  --output-dir output/
-```
-
 3. Generate the video using the Python script:
 
 ```bash
-python3 build/build.py output/script.json
+python3 <markdown-file> <output-directory>
 ```
 
 4. Manually upload the generated video to Youtube.
 
 ## References
 
-- [https://ray.so](https://ray.so)
+- [https://ray.so](https://ray.so), did not use this, but maybe an alternative
+  code renderer.
