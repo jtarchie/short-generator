@@ -102,31 +102,41 @@ def markdown_to_steps(source: str) -> List[Step]:
     return steps
 
 
+def digest(*s: str) -> str:
+    return hashlib.md5("".join(s).encode()).hexdigest()
+
+
 def say(voice, output_path: str, message: str) -> str:
     print(f"  say: {message}")
-    hash_value = hashlib.md5((voice.initialName + message).encode())
-    filename = os.path.join(output_path, hash_value.hexdigest() + ".wav")
+    filename = os.path.join(output_path, digest(voice.initialName, message) + ".wav")
     if not os.path.isfile(filename):
-        print("     saving file")
+        print(f"     saving file: {filename}")
         save_bytes_to_path(filename, voice.generate_audio_bytes(message))
     return filename
 
 
-def code(source_filename: str, output_filename: str, source: str):
+def code(output_path: str, source: str, extension: str) -> str:
+    source_digest = digest(source)
+    source_filename = os.path.join(output_path, source_digest + extension)
+    output_filename = os.path.join(output_path, source_digest + ".png")
     print(f"  code: {source_filename}")
 
     with open(source_filename, "w") as file:
         print(source, file=file)
-    subprocess.run(
-        [
-            "carbon-now",
-            source_filename,
-            "-h",
-            "-t",
-            os.path.splitext(output_filename)[0],
-        ],
-        check=True,
-    )
+    if not os.path.isfile(output_filename):
+        print(f"     saving file: {output_filename}")
+        subprocess.run(
+            [
+                "carbon-now",
+                source_filename,
+                "-h",
+                "-t",
+                os.path.splitext(output_filename)[0],
+            ],
+            check=True,
+        )
+
+    return output_filename
 
 
 def main():
@@ -168,14 +178,8 @@ def main():
             clips.append(clip)
         elif isinstance(step, Codeblock):
             time.sleep(5)
-            filename = f"code_{index}"
-            sourceCodeFilename = os.path.join(
-                working_dir, f"{filename}{step.extension}"
-            )
-            outputCodeFilename = os.path.join(working_dir, f"{filename}.png")
-            outputWaveFilename = os.path.join(working_dir, f"{filename}.wav")
 
-            code(sourceCodeFilename, outputCodeFilename, step.source.strip())
+            outputCodeFilename = code(working_dir, step.source.strip(), step.extension)
             outputWaveFilename = say(voice, working_dir, step.content.strip())
 
             audioClip = AudioFileClip(outputWaveFilename)
