@@ -14,23 +14,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - uses: actions/setup-go@v3
+    - uses: jtarchie/shared/actions/go-task@main
       with:
-        go-version: '1.20'
-        check-latest: true
-        cache: true
-    - name: Install golangci-lint
-      uses: jaxxstorm/action-install-gh-release@v1.10.0
-      with: # Grab the latest version
-        repo: golangci/golangci-lint
-        token: ${{ secrets.GITHUB_TOKEN }}
-        binaries-location: golangci-lint-1.52.0-linux-amd64
-        tag: v1.52.0
-    - name: Install task
-      uses: jaxxstorm/action-install-gh-release@v1.10.0
-      with: # Grab the latest version
-        repo: go-task/task
-        token: ${{ secrets.GITHUB_TOKEN }}
-        cache: enable
-    - name: Task
-      run: task
+        github-token: ${{ secrets.GITHUB_TOKEN }}
