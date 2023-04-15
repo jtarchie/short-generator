@@ -141,7 +141,7 @@ def code(output_path: str, source: str, extension: str) -> str:
 
 def main():
     client = ElevenLabsUser(os.getenv("ELEVENLABS_API_KEY"))
-    voice = client.get_voices_by_name("Rachel")[0]
+    voice = client.get_voices_by_name("JT")[0]
 
     screensize = (1080, 1920)
     markdown_file = sys.argv[1]
