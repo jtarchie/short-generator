@@ -17,6 +17,10 @@ jobs:
     - uses: actions/setup-python@v4
       with:
         python-version: '3.11'
-    - uses: jtarchie/shared/actions/go-task@main
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Install task
+      uses: jaxxstorm/action-install-gh-release@v1.10.0
+      with: # Grab the latest version
+        repo: go-task/task
+        token: ${{ inputs.github-token }}
+    - name: task
+      run: task
