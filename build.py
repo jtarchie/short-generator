@@ -156,8 +156,13 @@ def main():
         print(f"step #{index} - {step.__class__}")
         if isinstance(step, Heading):
             header = step.content.strip()
+            words = header.split()
+            groups = "\n".join(
+                [" ".join(words[i : i + 3]) for i in range(0, len(words), 3)]
+            )
+
             clip = (
-                TextClip(header, fontsize=70, size=screensize, color="white")
+                TextClip(groups, fontsize=70, size=screensize, color="white")
                 .set_position("center", "center")
                 .set_duration(3)
             )
