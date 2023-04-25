@@ -162,7 +162,7 @@ def main():
             )
 
             clip = (
-                TextClip(groups, fontsize=70, size=screensize, color="white")
+                TextClip(groups, method="caption", size=screensize, color="white")
                 .set_position("center", "center")
                 .set_duration(3)
             )
