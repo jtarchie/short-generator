@@ -143,8 +143,10 @@ def withBg(clip, screensize):
     bgClip = ColorClip(screensize, color=(144, 169, 183))
     return CompositeVideoClip(clips=[bgClip, clip], size=screensize)
 
+
 def text_color() -> str:
     return "black"
+
 
 def main():
     client = ElevenLabsUser(os.getenv("ELEVENLABS_API_KEY"))
