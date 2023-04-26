@@ -139,6 +139,13 @@ def code(output_path: str, source: str, extension: str) -> str:
     return output_filename
 
 
+def withBg(clip, screensize):
+    bgClip = ColorClip(screensize, color=(144, 169, 183))
+    return CompositeVideoClip(clips=[bgClip, clip], size=screensize)
+
+def text_color() -> str:
+    return "black"
+
 def main():
     client = ElevenLabsUser(os.getenv("ELEVENLABS_API_KEY"))
     voice = client.get_voices_by_name("JT")[0]
@@ -161,11 +168,12 @@ def main():
                 [" ".join(words[i : i + 3]) for i in range(0, len(words), 3)]
             )
 
-            clip = (
-                TextClip(groups, method="caption", size=screensize, color="white")
-                .set_position("center", "center")
-                .set_duration(3)
-            )
+            clip = withBg(
+                TextClip(
+                    groups, method="caption", size=screensize, color=text_color()
+                ).set_position("center", "center"),
+                screensize,
+            ).set_duration(3)
 
             clips.append(clip)
         elif isinstance(step, Voiceover):
@@ -174,8 +182,12 @@ def main():
 
             audioClip = AudioFileClip(outputWaveFilename)
             clip = (
-                TextClip(message, method="caption", size=screensize, color="white")
-                .set_position("center", "center")
+                withBg(
+                    TextClip(
+                        message, method="caption", size=screensize, color=text_color()
+                    ).set_position("center", "center"),
+                    screensize,
+                )
                 .set_audio(audioClip)
                 .set_duration(audioClip.duration)
             )
@@ -195,12 +207,8 @@ def main():
                 .set_audio(audioClip)
             )
             imageClip.fps = 1
-            bgClip = ColorClip(screensize, color=(255, 255, 255))
 
-            clip = CompositeVideoClip(
-                clips=[bgClip, imageClip], size=screensize
-            ).set_duration(audioClip.duration)
-
+            clip = withBg(imageClip, screensize).set_duration(audioClip.duration)
             clips.append(clip)
         else:
             raise f"unknown action {step.__class__}"
