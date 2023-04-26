@@ -16,7 +16,7 @@ from typing import List, Union
 import frontmatter
 import mistune
 from elevenlabslib import ElevenLabsUser
-from elevenlabslib.helpers import save_bytes_to_path
+from elevenlabslib.helpers import save_audio_bytes
 from moviepy.editor import (
     AudioFileClip,
     ColorClip,
@@ -111,7 +111,7 @@ def say(voice, output_path: str, message: str) -> str:
     filename = os.path.join(output_path, digest(voice.initialName, message) + ".wav")
     if not os.path.isfile(filename):
         print(f"     saving file: {filename}")
-        save_bytes_to_path(filename, voice.generate_audio_bytes(message))
+        save_audio_bytes(voice.generate_audio_bytes(message), filename, "wav")
     return filename
 
 
