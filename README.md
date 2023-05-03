@@ -21,15 +21,13 @@ brew bundle
 pip3 install -r requirements.txt
 ```
 
-2. Run the Go script to process the markdown file:
-
-3. Generate the video using the Python script:
+2. Generate the video using the Python script:
 
 ```bash
 python3 <markdown-file> <output-directory>
 ```
 
-4. Manually upload the generated video to Youtube.
+3. Manually upload the generated video to Youtube.
 
 ## References
 
