@@ -1,7 +1,7 @@
 # Generate Youtube Shorts
 
 This tool converts a markdown file into a Youtube Short, focusing specifically
-on programming idioms. It is built using Go and Python, with the Python script
+on programming idioms. It is built using Python, with the script
 handling the video and voiceover generation.
 
 ## Limitations
