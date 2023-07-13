@@ -6,8 +6,7 @@ handling the video and voiceover generation.
 
 ## Limitations
 
-- Currently uses `say` for voiceover; future plans include exploring
-  AI-generated voices
+- Currently uses AI-generated voices from ElevenLabs. 
 - Does not automatically upload to Youtube
 
 ## Usage
