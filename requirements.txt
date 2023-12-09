@@ -1,3 +1,4 @@
+auto-editor
 black
 elevenlabslib
 isort

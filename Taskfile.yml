@@ -4,12 +4,12 @@ tasks:
   format:
     cmds:
     - deno fmt README.md
-    - isort build.py
-    - black build.py
+    - isort *.py
+    - black *.py
   lint:
     cmds:
-    - pylint build.py
-    - mypy --ignore-missing-imports build.py
+    - pylint *.py
+    - mypy --ignore-missing-imports *.py
   default:
     cmds:
     - task: format
