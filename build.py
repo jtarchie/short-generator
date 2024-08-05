@@ -9,7 +9,6 @@ import hashlib
 import os
 import subprocess
 import sys
-import time
 from dataclasses import dataclass
 from typing import List, Union
 
@@ -196,8 +195,6 @@ def main():
 
             clips.append(clip)
         elif isinstance(step, Codeblock):
-            time.sleep(5)
-
             outputCodeFilename = code(working_dir, step.source.strip(), step.extension)
             outputWaveFilename = say(voice, working_dir, step.content.strip())
 
