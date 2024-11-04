@@ -1,12 +1,12 @@
 # Generate Youtube Shorts
 
 This tool converts a markdown file into a Youtube Short, focusing specifically
-on programming idioms. It is built using Python, with the script
-handling the video and voiceover generation.
+on programming idioms. It is built using Python, with the script handling the
+video and voiceover generation.
 
 ## Limitations
 
-- Currently uses AI-generated voices from ElevenLabs. 
+- Currently uses AI-generated voices from ElevenLabs.
 - Does not automatically upload to Youtube
 
 ## Usage
